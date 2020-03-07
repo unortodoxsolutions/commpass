@@ -1,0 +1,329 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <!-- <ion-menu-button></ion-menu-button> -->
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Visit Details</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="visit-details-content ion-padding" *ngIf='!checkIsArray(visitor.guest)'>
+    <div id="skeleton" *ngIf='!visitor'>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+    </div>
+    <ion-list lines='none' *ngIf='visitor'>
+        <!-- <p> -->
+        <!-- <ion-item> -->
+        <ion-text *ngIf='role === "security"'>
+            Guest Code: {{visitor.guestCode}}
+        </ion-text>
+        <!-- <ion-text *ngIf='role === "security"'>
+            Visitor: {{visitor.guest.fullname}}
+        </ion-text> -->
+        <ion-text>
+            Guest: {{visitor.guest.fullname}}
+        </ion-text>
+        <!-- </ion-item> -->
+        <br>
+        <ion-text *ngIf='role === "security"'>
+            Host: {{this.host.fullname}}
+        </ion-text>
+        <br *ngIf='role == "security"'>
+        <ion-text *ngIf='role === "security"'>
+            Host Apt: {{this.host.estateAptNum}}
+        </ion-text>
+        <br *ngIf='role == "security"'>
+        <!-- <ion-item> -->
+        <ion-text>
+            {{visitor.bookedAt | date:'medium'}}
+        </ion-text>
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='secondary'>
+            Status: {{visitor.status}}
+        </ion-text>
+        <!-- </ion-item> -->
+        <br>
+        <!-- </p> -->
+        <hr>
+        <ion-item *ngIf='role === "resident" || role === "dependent"'>
+            <!-- SHARE -->
+            <ion-grid>
+                <ion-row>
+                    <!-- <ion-col size='6'> -->
+                    <ion-button class='ion-activatable' expand='block' fill='solid' color='primary' (click)='shareBooking()'>
+                        <ion-icon name="share" slot='start'></ion-icon>
+                        share
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-button>
+                    <!-- </ion-col> -->
+                </ion-row>
+            </ion-grid>
+            <!-- RETURN/DETAIN -->
+            <ion-grid>
+                <ion-row>
+                    <ion-col size='6'>
+                        <ion-button class='ion-activatable' expand='block' fill='solid' color='primary' (click)='return()'>
+                            <ion-icon name="arrow-round-back" slot='start'></ion-icon>
+                            Return
+                            <ion-ripple-effect></ion-ripple-effect>
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size='6'>
+                        <ion-button class='ion-activatable' expand='block' fill='solid' color='secondary' (click)='detain()'>
+                            <ion-icon name="information-circle-outline" slot='start'></ion-icon>
+                            Detain
+                            <ion-ripple-effect></ion-ripple-effect>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <!-- <hr> -->
+        </ion-item>
+        <!-- <p> -->
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.confirmed !== "N/A"'>
+            Confirmed @ <span>{{visitor.confirmed | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.confirmed === "N/A"'>
+            Confirmed @ <span>{{visitor.confirmed}}</span>
+        </ion-text> -->
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.inAt !== "N/A"'>
+            In @ <span>{{visitor.inAt | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.inAt === "N/A"'>
+            In @ <span>{{visitor.inAt}}</span>
+        </ion-text> -->
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.leavingAt !== "N/A"'>
+            Leaving @ <span>{{visitor.leavingAt | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.inAt === "N/A"'>
+            Leaving @ <span>{{visitor.leavingAt}}</span>
+        </ion-text> -->
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.outAt !== "N/A"'>
+            Out @ <span>{{visitor.outAt | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.inAt === "N/A"'>
+            Out @ <span>{{visitor.outAt}}</span>
+        </ion-text> -->
+        <!-- <hr> -->
+        <!-- </ion-item> -->
+        <!-- </p> -->
+        <ion-item *ngIf='role !== "security"'>
+            <ion-label>Phone</ion-label>
+            <ion-input type="text" readonly [value]='visitor.guest.phone | titlecase' *ngIf='visitor.guest.phone !== "" && visitor.guest.phone !== "N/A"'></ion-input>
+            <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.phone === "N/A" || visitor.guest.phone === undefined'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Gender</ion-label>
+            <ion-input type="text" readonly [value]='visitor.guest.gender | titlecase' *ngIf='visitor.guest.gender !== "" && visitor.guest.gender !== "N/A"'></ion-input>
+            <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.gender === "N/A" || visitor.guest.gender === undefined'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Vehicle Make</ion-label>
+            <ion-input type="text" readonly [value]='visitor.guest.vehicleMake | titlecase' *ngIf='visitor.guest.vehicleMake !== "" && visitor.guest.vehicleMake !== "N/A"'></ion-input>
+            <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.vehicleMake === "N/A" || visitor.guest.vehicleMake === undefined'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Vehicle Color</ion-label>
+            <ion-input type="text" readonly [value]='visitor.guest.vehicleColor | titlecase' *ngIf='visitor.guest.vehicleColor !== "" && visitor.guest.vehicleColor !== "N/A"'></ion-input>
+            <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.vehicleColor === "N/A" || visitor.guest.vehicleColor === undefined'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Vehicle Reg Num</ion-label>
+            <ion-input type="text" readonly [value]='visitor.guest.vehicleRegNum | uppercase' *ngIf='visitor.guest.vehicleRegNum !== "" && visitor.guest.vehicleRegNum !== "N/A"'></ion-input>
+            <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.vehicleRegNum === "N/A" || visitor.guest.vehicleRegNum === undefined'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Comments</ion-label>
+            <ion-input type="text" readonly [value]='visitor.guest.comments | titlecase' *ngIf='visitor.guest.comments !== "" && visitor.guest.comments !== "N/A"'></ion-input>
+            <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.comments === "N/A" || visitor.guest.comments === undefined'></ion-input>
+        </ion-item>
+        <ion-button expland='block' fill='solid' *ngIf='role !== "security"' (click)='setLeaving()'>Visitor is Leaving</ion-button>
+        <ion-button expland='block' fill='solid' *ngIf='role !== "security"' (click)='bookOut()'>Cancel Visit</ion-button>
+        <ion-button expland='block' fill='solid' *ngIf='role === "security"' (click)='checkIn()'>Check In</ion-button>
+        <ion-button expland='block' fill='solid' *ngIf='role === "security"' (click)='checkOut()'>Check Out</ion-button>
+    </ion-list>
+</ion-content>
+
+<!-- GROUP GUEST CONTENT -->
+<ion-content class="group-visit-details-content ion-padding" *ngIf='checkIsArray(visitor.guest)'>
+    <div id="skeleton" *ngIf='!visitor'>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+        <ion-skeleton-text animated style='width: 100%; height: 20px'></ion-skeleton-text>
+    </div>
+    <ion-list lines='none' *ngIf='visitor'>
+        <!-- <p> -->
+        <ion-text *ngIf='role === "security"'>
+            Guest Code: {{visitor.guestCode}}
+        </ion-text>
+        <br *ngIf='role === "security"'>
+        <ion-text *ngIf='role === "security"'>
+            Number of Guests: {{visitor.guest.length}}
+        </ion-text>
+        <ion-card *ngIf='role == "resident" || role === "dependent"'>
+            <ion-text *ngFor='let guest of visitor.guest'>
+                Guest: {{guest.fullname}}
+            </ion-text>
+        </ion-card>
+        <br>
+        <!-- <ion-text *ngIf='role === "security"'>
+            Host: {{hostName}}
+        </ion-text> -->
+        <br *ngIf='role === "security"'>
+        <!-- <ion-item> -->
+        <ion-text>
+            {{visitor.bookedAt | date:'medium'}}
+        </ion-text>
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='secondary'>
+            Status: {{visitor.status}}
+        </ion-text>
+        <!-- </ion-item> -->
+        <br>
+        <!-- </p> -->
+        <hr>
+        <ion-item *ngIf='role === "resident" || role === "dependent"'>
+            <!-- SHARE -->
+            <ion-grid>
+                <ion-row>
+                    <!-- <ion-col size='6'> -->
+                    <ion-button class='ion-activatable' expand='block' fill='solid' color='primary' (click)='shareBooking()'>
+                        <ion-icon name="share" slot='start'></ion-icon>
+                        share
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-button>
+                    <!-- </ion-col> -->
+                </ion-row>
+            </ion-grid>
+            <ion-grid>
+                <ion-row>
+                    <ion-col size='6'>
+                        <ion-button expand='block' fill='solid' color='primary' (click)='return()'>
+                            <ion-icon name="arrow-round-back" slot='start'></ion-icon>
+                            Return
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size='6'>
+                        <ion-button expand='block' fill='solid' color='secondary' (click)='detain()'>
+                            <ion-icon name="information-circle-outline" slot='start'></ion-icon>
+                            Detain
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <hr>
+        </ion-item>
+        <!-- <p> -->
+        <!-- <ion-item> -->
+        <ion-text>
+            Confirmed @ <span>{{visitor.confirmed | date:'medium'}}</span>
+        </ion-text>
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.inAt !== "N/A"'>
+            In @ <span>{{visitor.inAt | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.inAt === "N/A"'>
+            In @ <span>{{visitor.inAt}}</span>
+        </ion-text> -->
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.leavingAt !== "N/A"'>
+            Leaving @ <span>{{visitor.leavingAt | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.inAt === "N/A"'>
+            Leaving @ <span>{{visitor.leavingAt}}</span>
+        </ion-text> -->
+        <!-- </ion-item> -->
+        <br>
+        <!-- <ion-item> -->
+        <ion-text color='app-background-shade' *ngIf='visitor.outAt !== "N/A"'>
+            Out @ <span>{{visitor.outAt | date:'medium'}}</span>
+        </ion-text>
+        <!-- <ion-text color='app-background-shade' *ngIf='visitor.inAt === "N/A"'>
+            Out @ <span>{{visitor.outAt}}</span>
+        </ion-text> -->
+        <hr>
+        <!-- </ion-item> -->
+        <!-- </p> -->
+        <!-- <ion-item>
+              <ion-label>Phone</ion-label>
+              <ion-input type="text" readonly [value]='visitor.guest.phone | titlecase' *ngIf='visitor.guest.phone !== ""'></ion-input>
+              <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.phone === ""'></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label>Gender</ion-label>
+              <ion-input type="text" readonly [value]='visitor.guest.gender | titlecase' *ngIf='visitor.guest.gender !== ""'></ion-input>
+              <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.gender === ""'></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label>Vehicle Make</ion-label>
+              <ion-input type="text" readonly [value]='visitor.guest.vehicleMake | titlecase' *ngIf='visitor.guest.vehicleMake !== ""'></ion-input>
+              <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.vehicleMake === ""'></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label>Vehicle Color</ion-label>
+              <ion-input type="text" readonly [value]='visitor.guest.vehicleColor | titlecase' *ngIf='visitor.guest.vehicleColor !== ""'></ion-input>
+              <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.vehicleColor === ""'></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label>Vehicle Reg Num</ion-label>
+              <ion-input type="text" readonly [value]='visitor.guest.vehicleRegNum | uppercase' *ngIf='visitor.guest.vehicleRegNum !== ""'></ion-input>
+              <ion-input type="text" readonly value='/A' *ngIf='visitor.guest.vehicleRegNum === ""'></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label>Comments</ion-label>
+              <ion-input type="text" readonly [value]='visitor.guest.comments | titlecase' *ngIf='visitor.guest.comments !== ""'></ion-input>
+              <ion-input type="text" readonly value='N/A' *ngIf='visitor.guest.comments === ""'></ion-input>
+          </ion-item> -->
+        <ion-button expland='block' fill='solid' *ngIf='role !== "security"' (click)='setLeaving()'>Visitor is Leaving</ion-button>
+        <ion-button expland='block' fill='solid' *ngIf='role !== "security"' (click)='bookOut()'>Cancel Visit</ion-button>
+        <ion-button expland='block' fill='solid' *ngIf='role === "security"' (click)='checkIn()'>Check In</ion-button>
+        <ion-button expland='block' fill='solid' *ngIf='role === "security"' (click)='checkOut()'>Check Out</ion-button>
+    </ion-list>
+</ion-content>

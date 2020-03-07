@@ -1,0 +1,12 @@
+ion-fab-button.lg {
+    width: 250px;
+    height: 50px;
+    --border-radius: 10px !important;
+    border: 0;
+    transform: translateX(-200px);
+}
+
+p.hint {
+    text-align: center;
+    color: var(--app-background-shade);
+}

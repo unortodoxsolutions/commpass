@@ -1,0 +1,42 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <!-- <ion-menu-button></ion-menu-button> -->
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Dependent Details</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="dependent-details-content ion-padding">
+    <ion-list lines='full'>
+        <ion-list-header>INFORMATION</ion-list-header>
+        <!-- <ion-item>
+                <ion-label stacked>{{'Estate Name' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='profile.estateName + " Estate" | titlecase'></ion-input>
+            </ion-item> -->
+        <ion-item>
+            <ion-label stacked>Fullname</ion-label>
+            <ion-input readonly type="text" [value]='dependent.fullname | titlecase'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Email</ion-label>
+            <ion-input readonly type="email" [value]='dependent.email'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Phone Number</ion-label>
+            <ion-input readonly type="text" [value]='dependent.phone | titlecase'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Relationship</ion-label>
+            <ion-input readonly type="text" [value]='dependent.relationship | titlecase'></ion-input>
+        </ion-item>
+    </ion-list>
+    <!-- DEPENDENT'S VISITORS LOG -->
+    <ion-list lines='full' *ngIf='dependent.visitors !== "" || dependent.visitors !== null'>
+        <ion-list-header>VISITORS LOG</ion-list-header>
+        <ion-item *ngFor='let visitor of dependent.visitors; let i = index'>
+            <ion-input type="text" readonly [value]='visitor.fullname | titlecase'></ion-input>
+        </ion-item>
+    </ion-list>
+</ion-content>

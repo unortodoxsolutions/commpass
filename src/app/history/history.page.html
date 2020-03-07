@@ -1,0 +1,129 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot='start'>
+            <ion-back-button></ion-back-button>
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title> History </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf='role === "resident" || role === "dependent"'>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf='role === "resident"'>
+        <ion-fab-button>
+            <ion-icon name="add-circle"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button (click)='bookGuest()'>
+                <ion-icon src="../../assets/sample-icons/activity/person.svg"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)='bookGroupGuest()'>
+                <ion-icon src="../../assets/sample-icons/activity/group.svg"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+    <ion-searchbar placeholder="Search Visitor By Guest Code" inputmode='text' mode='ios' animated [(ngModel)]='searchKey' (ionChange)='search($event)' *ngIf='visitors !== undefined || profile'></ion-searchbar>
+    <!-- <ion-button color='primary' fill='outline' expand='block' style='height: 40px; width: 140px; margin: auto' (click)='search()' *ngIf='visitors !== undefined'>Search</ion-button> -->
+    <p class="search__hint">{{searchErrorText}}</p>
+    <div id="welcome__message" *ngIf='!profile'>
+        <p class="hint" *ngIf='!visitors'>Your visitor history will show here</p>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 63px; border-radius: 10px"></ion-skeleton-text>
+    </div>
+    <ion-list lines='full'>
+        <!-- <ion-list-header>Visitors</ion-list-header> -->
+        <ion-grid class="ion-activatable" *ngFor="let visitor of visitors; let i = index" (click)="viewVisitor(i)">
+            <div class="single__guest" *ngIf='!checkIsArray(visitor.guest)'>
+                <ion-item-group>
+                    <ion-item>
+                        <!-- <ion-row> -->
+                        <ion-avatar item-left>
+                            <!-- <img src=""> -->
+                            <ion-text>{{visitor.guestCode}}</ion-text>
+                        </ion-avatar>
+                        <ion-col size='8'>
+                            <h6 class="name"> {{ visitor.guest.fullname | titlecase}}</h6>
+                            <p class="bookedAt">{{ visitor.bookedAt | date:'medium' }}</p>
+                        </ion-col>
+                        <ion-col size='2'>
+                            <p class="status">{{visitor.status}}</p>
+                        </ion-col>
+                        <!-- </ion-row> -->
+                    </ion-item>
+                </ion-item-group>
+                <!-- <ion-row>
+                    <ion-label color='danger'>Name</ion-label>
+                    <ion-skeleton-text animated style="width: 80%" *ngIf='!visitor'></ion-skeleton-text>
+                    <ion-input type="text" readonly [value]='visitor.guest.fullname | titlecase' *ngIf='visitor'></ion-input>
+                </ion-row>
+                <ion-row>
+                    <small>{{visitor.bookedAt | date:'medium'}}</small>
+                </ion-row> -->
+            </div>
+            <div class="group__guest" *ngIf='checkIsArray(visitor.guest)'>
+                <ion-item-group>
+                    <ion-item>
+                        <!-- <ion-row> -->
+                        <ion-avatar item-left>
+                            <!-- <img src=""> -->
+                            <ion-text>{{visitor.guestCode}}</ion-text>
+                        </ion-avatar>
+                        <ion-col size='8'>
+                            <h6 class="name"> {{ visitor.guest[0].fullname | titlecase}} & {{visitor.guest.length - 1}} Other(s)</h6>
+                            <p class="bookedAt">{{ visitor.bookedAt | date:'medium' }}</p>
+                        </ion-col>
+                        <ion-col size='2'>
+                            <p class="status">{{visitor.status}}</p>
+                        </ion-col>
+                        <!-- </ion-row> -->
+                    </ion-item>
+                </ion-item-group>
+            </div>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-grid>
+    </ion-list>
+</ion-content>
+
+<!-- SECURITY CONTENT -->
+<ion-content class="ion-padding sec-content" *ngIf='role === "security"'>
+    <p class="hint" *ngIf='!visitors'>Visitor history will show here</p>
+    <div id="welcome__message" *ngIf='!profile'>
+        <ion-row>
+            <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+            <!-- <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70px; height: 70px; border-radius: 50%"></ion-skeleton-text> -->
+        </ion-row>
+    </div>
+    <ion-list lines='full'>
+        <ion-row>
+            <div class="visitor__code ion-activatable" *ngFor='let visitor of visitors; let i = index' (click)="viewVisitor(i)">
+                <p id="visitor__code--text">{{visitor.guestCode}}</p>
+                <ion-ripple-effect></ion-ripple-effect>
+            </div>
+        </ion-row>
+        <!-- <ion-searchbar placeholder="Search Visitor" inputmode='text' mode='ios' animated [(ngModel)]='searchKey' (ionChange)='filter($event)'></ion-searchbar> -->
+        <!-- <ion-button color='medium' fill='outline' expand='block' (click)='search()'>Search</ion-button> -->
+        <!-- <ion-list-header>Visitors</ion-list-header> -->
+        <!-- <ion-grid *ngFor="let visitor of visitors; let i = index" (click)="viewVisitor(i)">
+                <ion-row>
+                    <ion-label color='danger'>Name</ion-label>
+                    <ion-skeleton-text animated style="width: 80%" *ngIf='!visitor'></ion-skeleton-text>
+                    <ion-input type="text" readonly [value]='visitor.fullname | titlecase' *ngIf='visitor'></ion-input>
+                </ion-row>
+                <ion-row>
+                    <small>{{visitor.bookedAt | date:'medium'}}</small>
+                </ion-row>
+            </ion-grid> -->
+    </ion-list>
+</ion-content>

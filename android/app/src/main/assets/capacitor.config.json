@@ -1,0 +1,12 @@
+{
+  "appId": "com.daemon.commpass",
+  "appName": "CommPass",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false
+    }
+  }
+}

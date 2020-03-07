@@ -1,0 +1,166 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            {{role | titlecase}} Home
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="categories-content">
+    <!-- DIV TO SHOW IF isSecurity -->
+    <div id="security" *ngIf='this.role === "security"'>
+        <!-- ION-SEARCHBAR -->
+
+        <!-- SHOW A LIST OF ALL VISITORS ORDERED BY BOOKEDAT -->
+        <!-- <ion-list lines='none'>
+                  <ion-item *ngFor="let visitor of visitors; let i = index" (click)="viewVisitor(i)" >
+                        {{visitor.fullname}}
+                  </ion-item>
+            </ion-list> -->
+        <ion-row class="user-stats-section">
+            <!-- <ion-col class="user-stats-wrapper" size="4">
+                <span class="stat-value">
+                  <app-text-shell [data]="profile.likes"></app-text-shell>
+                </span>
+                <span class="stat-name">{{ 'LIKES' | translate }}</span>
+              </ion-col>
+              <ion-col class="user-stats-wrapper" size="4">
+                <span class="stat-value">
+                  <app-text-shell [data]="profile.followers"></app-text-shell>
+                </span>
+                <span class="stat-name">{{ 'FOLLOWERS' | translate }}</span>
+              </ion-col>
+              <ion-col class="user-stats-wrapper" size="4">
+                <span class="stat-value">
+                  <app-text-shell [data]="profile.following"></app-text-shell>
+                </span>
+                <span class="stat-name">{{ 'FOLLOWING' | translate }}</span>
+              </ion-col> -->
+            <ion-segment (ionChange)='segmentChanged($event)' [(ngModel)]="segment">
+                <ion-segment-button value="news">
+                    <ion-label>NEWS</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="visitors">
+                    <ion-label>VISITORS</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </ion-row>
+        <div [ngSwitch]='segment'>
+            <div id="news" *ngSwitchCase="'news'">
+
+                <ion-list lines='full'>
+                    <ion-item id='news-item' *ngFor="let news of estateNews; let i = index" (click)="viewNews(i)">
+                        <ion-row class="news-data-row">
+                            <ion-col size="12">
+                                <h3 class="news-title">
+                                    <app-text-shell [data]="news.title"></app-text-shell>
+                                </h3>
+                                <h5 class="news-shortTxt">
+                                    <app-text-shell [data]="news.shortTxt"></app-text-shell>
+                                </h5>
+                            </ion-col>
+                            <!-- <ion-col class="membership-col">
+                                <span class="news-membership">
+                        <app-text-shell [data]="profile.membership"></app-text-shell>
+                      </span>
+                            </ion-col> -->
+                        </ion-row>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <div id="visitors" *ngSwitchCase="'visitors'">
+
+                <ion-list lines='full'>
+                    <ion-item id='news-item' *ngFor="let visitor of visitors; let i = index" (click)="viewVisitor(i)">
+                        <!-- <ion-text> -->
+                        {{visitor.fullname}}
+                        <!-- </ion-text> -->
+                        <br>
+                        <!-- <ion-text>-->
+                        <!-- <small> 
+                        <ion-text color='success'> -->
+                        {{visitor.bookedAt.split('(')[0]}}
+                        <!-- </ion-text>
+                        </small> -->
+                        <!-- </ion-text> -->
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIV TO SHOW IF isResident || isDependent -->
+    <div id="resident" *ngIf='this.role === "resident" || this.role === "dependent"'>
+        <!-- SHOW ESTATE NEWS ADDED BY HOA FOR RESIDENT'S ESTATE -->
+        <ion-list lines='full'>
+            <ion-item id='news-item' *ngFor="let news of estateNews; let i = index" (click)="viewNews(i)">
+                <!-- {{news.title}} <br> {{news.shortTxt}} -->
+                <ion-row class="news-data-row">
+                    <ion-col size="12">
+                        <h3 class="news-title">
+                            <app-text-shell [data]="news.title"></app-text-shell>
+                        </h3>
+                        <h5 class="news-shortTxt">
+                            <app-text-shell [data]="news.shortTxt"></app-text-shell>
+                        </h5>
+                    </ion-col>
+                    <!-- <ion-col class="membership-col">
+                      <span class="news-membership">
+              <app-text-shell [data]="profile.membership"></app-text-shell>
+            </span>
+                  </ion-col> -->
+                </ion-row>
+            </ion-item>
+        </ion-list>
+    </div>
+    <!-- <ion-row class="categories-list">
+    <ion-col class="category-item travel-category" size="12">
+      <app-image-shell [mode]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/travel.png'">
+        <app-aspect-ratio [ratio]="{w:75, h:49}">
+          <a class="category-anchor" [routerLink]="['/app/categories/travel']">
+            <h2 class="category-title">Travel</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item fashion-category" size="6">
+      <app-image-shell [mode]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/fashion.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/app/categories/fashion']">
+            <h2 class="category-title">Fashion</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item food-category" size="6">
+      <app-image-shell [mode]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/food.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/app/categories/food']">
+            <h2 class="category-title">Food</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item deals-category" size="12">
+      <app-image-shell [mode]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/deals.png'">
+        <app-aspect-ratio [ratio]="{w:75, h:30}">
+          <a class="category-anchor" [routerLink]="['/app/categories/deals']">
+            <h2 class="category-title">Deals</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item real-estate-category" size="12">
+      <app-image-shell [mode]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/real-estate.png'">
+        <app-aspect-ratio [ratio]="{w:75, h:30}">
+          <a class="category-anchor" [routerLink]="['/app/categories/real-estate']">
+            <h2 class="category-title">Real Estate</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+  </ion-row> -->
+</ion-content>

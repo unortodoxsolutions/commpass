@@ -1,0 +1,60 @@
+// http://ionicframework.com/docs/theming/
+@import url('https://fonts.googleapis.com/css?family=Rubik:300,400,500,700');
+@import "~@ionic/angular/css/core.css";
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+// EXTRA GLOBAL STYLES
+// Add custom Ionic Colors
+@import "./theme/custom-ion-colors.scss";
+// Add base app styles
+@import "./theme/app-defaults.scss";
+// Add base shell styles
+@import "./theme/shell-defaults.scss";
+// ion-button {
+//     width: 100% !important;
+//     height: 50px !important;
+// }
+ion-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ion-activatable {
+    position: relative;
+    overflow: hidden;
+}
+
+ion-tab-button.tab-selected {
+    background: var(--app-background-shade) !important;
+}
+
+ion-item,
+ion-list {
+    --background: transparent !important;
+    background-color: transparent !important;
+    margin-bottom: 10px;
+}
+
+ion-header,
+ion-footer {
+    --background: var(--app-background) !important;
+    background: var(--app-background) !important;
+}
+
+ion-menu ion-content {
+    --background: var(--page-background) !important;
+    background: var(--page-background) !important;
+}
+
+p.hint {
+    text-align: center;
+    color: var(--ion-color-medium) !important;
+}

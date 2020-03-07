@@ -1,0 +1,224 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Carpooling
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="carpooling-content" #content>
+    <ion-img src='https://sciexaminer.com/wp-content/uploads/2019/10/Carpooling-990x660.jpg' height='150px'></ion-img>
+    <ion-segment [(ngModel)]="segment" (ionChange)='segmentChanged($event)'>
+        <ion-segment-button [disabled]='isLoading' value="findRide" color='secondary'>
+            <ion-label color='secondary'>Find A Ride</ion-label>
+        </ion-segment-button>
+        <ion-segment-button [disabled]='isLoading' value="offerRide">
+            <ion-label color='secondary'>Offer Ride</ion-label>
+        </ion-segment-button>
+        <ion-segment-button [disabled]='isLoading' value="rideHistory">
+            <ion-label color='secondary'>History</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+    <div [ngSwitch]='segment'>
+        <div id="findRide" [hidden]="this.segment !== 'findRide'">
+            <form [formGroup]="findRideForm" (ngSubmit)="findRide()">
+                <ion-list lines='full'>
+                    <!-- FROM LOCATION  -->
+                    <ion-item>
+                        <ion-label stacked>From</ion-label>
+                        <input ngx-google-places-autocomplete #findFrom type="text" id='findFrom' inputmode="text" autocomplete='on' formControlName='findFrom'>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.findFrom">
+                            <div class="error-message" *ngIf="findRideForm.get('findFrom').hasError(validation.type) && (findRideForm.get('findFrom').dirty || findRideForm.get('findFrom').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- TO LOCATION  -->
+                    <ion-item>
+                        <ion-label stacked>To</ion-label>
+                        <input ngx-google-places-autocomplete #findTo type="text" id='findTo' autocomplete='on' inputmode="text" formControlName='findTo'>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.findTo">
+                            <div class="error-message" *ngIf="findRideForm.get('findTo').hasError(validation.type) && (findRideForm.get('findTo').dirty || findRideForm.get('findTo').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- AVAILABLE SEATS  -->
+                    <ion-item>
+                        <ion-label stacked>Seats</ion-label>
+                        <ion-input type="number" inputmode="number" formControlName='findSeats'></ion-input>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.findSeats">
+                            <div class="error-message" *ngIf="findRideForm.get('findSeats').hasError(validation.type) && (findRideForm.get('findSeats').dirty || findRideForm.get('findSeats').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <ion-button type="submit" expand='block' fill='solid' color='primary' [disabled]='!findRideForm.valid || isLoading'>
+                        <ion-spinner name="crescent" slot='start' *ngIf='isLoading'></ion-spinner>
+                        <ion-text>{{findRideButtonText}}</ion-text>
+                    </ion-button>
+                </ion-list>
+            </form>
+
+            <p class="hint" *ngIf='findRideSearchResults === []'>
+                No Results
+            </p>
+
+            <div *ngIf='!findRideSearchResults && isLoading'>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+            </div>
+
+            <ion-list class='findRideResultList' lines='full' *ngIf='findRideSearchResults'>
+                <ion-list-header>Search Results</ion-list-header>
+                <ion-item class='findRideResultItem ion-activatable' *ngFor="let ride of findRideSearchResults; let i = index" (click)="viewRideDetails(i)">
+                    <ion-avatar item-left>
+                        <img src="https://picsum.photos/100" *ngIf='ride.offeredBy.profilePic === undefined'>
+                        <img [src]='ride.offeredBy.profilePic' *ngIf='ride.offeredBy.profilePic !== undefined'>
+                    </ion-avatar>
+                    <ion-col size='7'>
+                        <h6 class="rideResidentName"> {{ ride.offeredBy.fullname | titlecase }}</h6>
+                        <p class="rideFromTo">{{ ride.from }} - {{ ride.to }}</p>
+                    </ion-col>
+                    <ion-col size='3'>
+                        <p class="rideTime">
+                            <ion-icon name="time"></ion-icon>
+                            {{ ride.time | date:'shortTime' }}
+                        </p>
+                        <p class="rideSeats">
+                            <ion-icon name="people"></ion-icon>
+                            {{ ride.seats }}
+                        </p>
+                    </ion-col>
+                    <ion-ripple-effect></ion-ripple-effect>
+                    <!-- {{ride.from}} -->
+                </ion-item>
+            </ion-list>
+
+        </div>
+        <div id="offerRide" [hidden]="this.segment !== 'offerRide'">
+            <form [formGroup]="offerRideForm" (ngSubmit)="offerRide()">
+                <ion-list lines='full'>
+                    <!-- FROM LOCATION  -->
+                    <ion-item>
+                        <ion-label stacked>From</ion-label>
+                        <input ngx-google-places-autocomplete #offerFrom type="text" id='offerFrom' autocomplete='on' inputmode="text" formControlName='offerFrom'>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.offerFrom">
+                            <div class="error-message" *ngIf="offerRideForm.get('offerFrom').hasError(validation.type) && (offerRideForm.get('offerFrom').dirty || offerRideForm.get('offerFrom').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- TO LOCATION  -->
+                    <ion-item>
+                        <ion-label stacked>To</ion-label>
+                        <input ngx-google-places-autocomplete #offerTo type="text" id='offerTo' autocomplete='on' inputmode="text" formControlName='offerTo'>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.offerTo">
+                            <div class="error-message" *ngIf="offerRideForm.get('offerTo').hasError(validation.type) && (offerRideForm.get('offerTo').dirty || offerRideForm.get('offerTo').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- RIDE DATE  -->
+                    <ion-item>
+                        <ion-label>Date</ion-label>
+                        <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat='DD MM YYYY' formControlName='offerDate'></ion-datetime>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.offerDate">
+                            <div class="error-message" *ngIf="offerRideForm.get('offerDate').hasError(validation.type) && (offerRideForm.get('offerDate').dirty || offerRideForm.get('offerDate').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- RIDE TIME  -->
+                    <ion-item>
+                        <ion-label>Time</ion-label>
+                        <ion-datetime displayFormat='HH:mm' pickerFormat='HH:mm' formControlName='offerTime'></ion-datetime>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.offerTime">
+                            <div class="error-message" *ngIf="offerRideForm.get('offerTime').hasError(validation.type) && (offerRideForm.get('offerTime').dirty || offerRideForm.get('offerTime').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- AVAILABLE SEATS  -->
+                    <ion-item>
+                        <ion-label stacked>Available Seats</ion-label>
+                        <ion-input type="number" inputmode="number" formControlName='offerSeats'></ion-input>
+                    </ion-item>
+                    <div class="error-container">
+                        <ng-container *ngFor="let validation of validation_messages.offerSeats">
+                            <div class="error-message" *ngIf="offerRideForm.get('offerSeats').hasError(validation.type) && (offerRideForm.get('offerSeats').dirty || offerRideForm.get('offerSeats').touched)">
+                                <ion-icon name="information-circle-outline"></ion-icon>
+                                <span>{{ validation.message }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ion-list>
+
+                <ion-button type="submit" expand='block' fill='solid' color='primary' [disabled]='!offerRideForm.valid || isLoading'>
+                    <ion-spinner name="crescent" slot='start' *ngIf='isLoading'></ion-spinner>
+                    <ion-text>{{offerRideButtonText}}</ion-text>
+                </ion-button>
+            </form>
+        </div>
+        <div id="rideHistory" *ngSwitchCase="'rideHistory'">
+            <!--  -->
+            <div *ngIf='!rideHistory'>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%; height: 70px; background-color: var(--app-background-shade)"></ion-skeleton-text>
+            </div>
+            <ion-list class='rideHistoryList' lines='full' *ngIf='this.rideHistory != []'>
+                <ion-item class='rideHistoryItem ion-activatable' *ngFor="let ride of rideHistory; let i = index" (click)="viewRideHistoryDetails(i)">
+                    <ion-avatar item-left>
+                        <img src="https://picsum.photos/100" *ngIf='ride.offeredBy.profilePic === undefined'>
+                        <img [src]='ride.offeredBy.profilePic' *ngIf='ride.offeredBy.profilePic !== undefined'>
+                    </ion-avatar>
+                    <ion-col size='7'>
+                        <h6 class="rideResidentName"> {{ ride.offeredBy.fullname | titlecase }}</h6>
+                        <p class="rideFromTo">{{ ride.from }} - {{ ride.to }}</p>
+                    </ion-col>
+                    <ion-col size='3'>
+                        <p class="rideTime">
+                            <ion-icon name="time"></ion-icon>
+                            {{ ride.time | date:'shortTime' }}
+                        </p>
+                        <p class="rideSeats">
+                            <ion-icon name="people"></ion-icon>
+                            {{ ride.seats }}
+                        </p>
+                    </ion-col>
+                    <ion-ripple-effect></ion-ripple-effect>
+                    <!-- {{ride.from}} -->
+                </ion-item>
+            </ion-list>
+        </div>
+    </div>
+</ion-content>

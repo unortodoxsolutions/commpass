@@ -1,0 +1,109 @@
+ion-input {
+    text-align: end !important
+}
+
+ion-item,
+ion-list-header {
+    --padding-start: 0 !important;
+}
+
+ion-list-header {
+    color: var(--ion-color-medium) !important
+}
+
+ion-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.search__hint {
+    color: var(--ion-color-danger) !important;
+    padding: 10px !important;
+    text-align: center;
+}
+
+.single__guest,
+.group__guest {
+    ion-item-group {
+        ion-item {
+            ion-avatar {
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                padding: 20px !important;
+                height: 70px !important;
+                width: 70px !important;
+                background: var(--app-background-shade);
+            }
+            // ion-row {
+            ion-col[size='8'] {
+                height: 70px !important;
+                margin: 0px 0px 0px 20px;
+                padding: 0;
+                /* align-items: center; */
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+                h6,
+                p {
+                    padding: 0 !important;
+                    margin: 0 !important
+                }
+                p {
+                    color: grey !important;
+                }
+            }
+            ion-col[size='2'] {
+                margin: 0;
+                padding: 0;
+                transform: translate(-40px, -20px);
+                text-align: right;
+                .status {
+                    font-size: 12px;
+                    color: var(--ion-color-secondary) !important;
+                }
+            }
+            // }
+        }
+    }
+}
+
+ion-grid {
+    //     background: var(--app-background-shade);
+    padding: 0px 0px 10px 0px;
+    border-radius: 10px;
+    //     margin-top: 20px;
+}
+
+ion-button {
+    width: 30%;
+    margin-left: 35%;
+}
+
+p {
+    padding: 0 !important;
+    margin: 0 !important;
+    color: var(--ion-color-dark) !important
+}
+
+.sec-content {
+    ion-row {
+        justify-content: center !important;
+        .visitor__code {
+            height: 70px !important;
+            width: 70px !important;
+            border-radius: 50%;
+            background: var(--app-background-shade) !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            #visitor__code--text {
+                color: #000 !important;
+            }
+        }
+    }
+}

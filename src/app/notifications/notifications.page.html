@@ -1,0 +1,106 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Notifications
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="notifications-content">
+    <p class="hint" *ngIf='!notifications'>Notifications and Other Messages Will Appear Here</p>
+    <p class="hint" *ngIf='notifications == []'>No Notifications Found</p>
+    <div class="skeleton" *ngIf='!notifications'>
+        <ion-skeleton-text style='height: 33vh; width: 100%'></ion-skeleton-text>
+        <ion-skeleton-text style='height: 33vh; width: 100%'></ion-skeleton-text>
+        <ion-skeleton-text style='height: 33vh; width: 100%'></ion-skeleton-text>
+    </div>
+    <ng-container *ngIf='notifications'>
+        <ion-card *ngFor='let notification of notifications; let i = index'>
+            <ion-card-header>
+                <ion-card-subtitle color='primary' *ngIf='notification.notifType === "rideRequest"'>Ride Request</ion-card-subtitle>
+                <ion-card-subtitle color='secondary' *ngIf='notification.notifType === "rideResponsePos"'>Ride Request Accepted</ion-card-subtitle>
+                <ion-card-subtitle color='danger' *ngIf='notification.notifType === "rideResponseNeg"'>Ride Request Declined</ion-card-subtitle>
+                <ion-card-subtitle color='danger' *ngIf='notification.notifType !== "rideResponseNeg" && notification.notifType !== "rideResponsePos" && notification.notifType !== "rideRequest"'>{{ notification.notifType }}</ion-card-subtitle>
+                <ion-card-title>{{ notification.title }}</ion-card-title>
+                <ion-spinner *ngIf='loading' item-right></ion-spinner>
+            </ion-card-header>
+
+            <ion-card-content>
+                {{ notification.message }}
+                <p id='sentAt'>{{ notification.sentAt | date:'shortDate' }} {{ notification.sentAt | date:'shortTime' }}</p>
+            </ion-card-content>
+            <div class="card-actions" *ngIf='notification.notifType === "rideRequest"'>
+                <ion-row>
+                    <ion-col size='6'>
+                        <ion-button shape='round' fill='outline' [disabled]='loading' color='danger' (click)='rejectRequest(i)'>
+                            Reject
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size='6'>
+                        <ion-button shape='round' fill='solid' [disabled]='loading' color='primary' (click)='acceptRequest(i)'>
+                            Accept
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </ion-card>
+        <!-- <ion-card>
+            <ion-card-header>
+                <ion-card-subtitle color='secondary'>Notice</ion-card-subtitle>
+                <ion-card-title>Notification Title</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus, aperiam quas ad, dignissimos rerum hic, libero deserunt molestiae ullam dolorum suscipit facere. Quos, saepe dolorum. Delectus iste eveniet debitis saepe.
+            </ion-card-content>
+        </ion-card> -->
+    </ng-container>
+    <!-- <ng-container *ngIf="notifications">
+        <ion-item-group>
+            <ion-item-divider sticky>
+                <ion-label>Today</ion-label>
+            </ion-item-divider>
+            <ion-item class="notification-item" lines="none" *ngFor="let notification of notifications.today">
+                <ion-row class="notification-item-wrapper">
+                    <ion-col size="2">
+                        <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+                            <app-image-shell class="notification-image" [src]="notification.image" [alt]="'user image'"></app-image-shell>
+                        </app-aspect-ratio>
+                    </ion-col>
+                    <ion-col class="details-wrapper">
+                        <h2 class="details-name">{{ notification.name }}</h2>
+                        <p class="details-description">{{ notification.message }}</p>
+                    </ion-col>
+                    <ion-col size="2" class="date-wrapper">
+                        <h3 class="notification-date">{{ notification.date }}</h3>
+                    </ion-col>
+                </ion-row>
+            </ion-item>
+        </ion-item-group>
+        <ion-item-group>
+            <ion-item-divider sticky>
+                <ion-label>Yesterday</ion-label>
+            </ion-item-divider>
+            <ion-item class="notification-item" lines="none" *ngFor="let notification of notifications.yesterday">
+                <ion-row class="notification-item-wrapper">
+                    <ion-col size="2">
+                        <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+                            <app-image-shell class="notification-image" [src]="notification.image" [alt]="'user image'"></app-image-shell>
+                        </app-aspect-ratio>
+                    </ion-col>
+                    <ion-col class="details-wrapper">
+                        <h2 class="details-name">{{ notification.name }}</h2>
+                        <p class="details-description">{{ notification.message }}</p>
+                    </ion-col>
+                    <ion-col size="2" class="date-wrapper">
+                        <h3 class="notification-date">{{ notification.date }}</h3>
+                    </ion-col>
+                </ion-row>
+            </ion-item>
+        </ion-item-group>
+    </ng-container> -->
+</ion-content>

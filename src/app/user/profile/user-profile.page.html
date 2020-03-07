@@ -1,0 +1,259 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Profile
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="user-profile-content">
+    <ion-row class="user-details-section">
+        <ion-col class="user-image-wrapper" (click)='addProfileImg()'>
+            <!-- <div id="edit-profile-icon">
+                <ion-icon name="create"></ion-icon>
+            </div> -->
+            <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+                <app-image-shell class="user-image" animation="spinner" [src]="profilePic"></app-image-shell>
+            </app-aspect-ratio>
+        </ion-col>
+        <ion-col class="user-info-wrapper">
+            <ion-row class="user-data-row">
+                <ion-col size="9">
+                    <h3 class="user-name">
+                        <app-text-shell [data]="profile.fullname"></app-text-shell>
+                    </h3>
+                    <h5 class="user-title">
+                        <app-text-shell [data]="profile.role"></app-text-shell>
+                    </h5>
+                </ion-col>
+                <!-- <ion-col class="membership-col">
+                    <span class="user-membership">
+            <app-text-shell [data]="profile.membership"></app-text-shell>
+          </span>
+                </ion-col> -->
+            </ion-row>
+            <ion-row class="actions-row">
+                <ion-col class="main-actions">
+                    <!-- <ion-button class="call-to-action-btn" size="small" color="primary" (click)='toBookGuestPage()' *ngIf='role === "resident" || role === "dependent"'>{{ 'BOOK GUEST' | translate }}</ion-button> -->
+                    <ion-button class="call-to-action-btn" size="small" color="primary" (click)='getLocation()' *ngIf='role === "resident" || role === "dependent"'>{{ 'GET LOCATION' | translate }}</ion-button>
+                    <ion-button class="call-to-action-btn" size="small" color="danger" (click)='logOut()'>{{'LOG OUT' | translate}}</ion-button>
+                </ion-col>
+                <ion-col class="secondary-actions">
+                    <ion-button class="more-btn" size="small" fill="clear" color="medium" (click)="editProfile()">
+                        <ion-icon slot="icon-only" name="create"></ion-icon>
+                    </ion-button>
+                    <!-- <ion-button class="more-btn" size="small" fill="clear" color="medium" (click)="openLanguageChooser()">
+                        <ion-icon slot="icon-only" name="more"></ion-icon>
+                    </ion-button> -->
+                </ion-col>
+            </ion-row>
+        </ion-col>
+    </ion-row>
+    <div class="user-about-section">
+        <h3 class="details-section-title">{{ 'ABOUT' | translate }}</h3>
+        <p class="user-description">
+            <app-text-shell animation="bouncing" lines="4" [data]="profile.about" *ngIf='role === "resident"'></app-text-shell>
+            <app-text-shell animation="bouncing" lines="4" [data]="profile.about" *ngIf='role === "security"'></app-text-shell>
+            <app-text-shell animation="bouncing" lines="4" [data]="profile.relationship + ' to ' + dependentOn.fullname" *ngIf='role === "dependent"'></app-text-shell>
+        </p>
+    </div>
+    <ion-row class="user-stats-section" *ngIf='role === "resident"'>
+        <!-- <ion-col class="user-stats-wrapper" size="4">
+      <span class="stat-value">
+        <app-text-shell [data]="profile.likes"></app-text-shell>
+      </span>
+      <span class="stat-name">{{ 'LIKES' | translate }}</span>
+    </ion-col>
+    <ion-col class="user-stats-wrapper" size="4">
+      <span class="stat-value">
+        <app-text-shell [data]="profile.followers"></app-text-shell>
+      </span>
+      <span class="stat-name">{{ 'FOLLOWERS' | translate }}</span>
+    </ion-col>
+    <ion-col class="user-stats-wrapper" size="4">
+      <span class="stat-value">
+        <app-text-shell [data]="profile.following"></app-text-shell>
+      </span>
+      <span class="stat-name">{{ 'FOLLOWING' | translate }}</span>
+    </ion-col> -->
+        <ion-segment (ionChange)='segmentChanged($event)' [(ngModel)]="segment">
+            <ion-segment-button value="visitors" color='secondary'>
+                <ion-label color='secondary'>ABOUT ME</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="dependents">
+                <ion-label>DEPENDENTS</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-row>
+    <div [ngSwitch]='segment' *ngIf='role === "resident"'>
+        <div id="dependents" *ngSwitchCase="'dependents'">
+            <ion-fab vertical="bottom" horizontal="end">
+                <ion-fab-button (click)='toCreateDependent()'>
+                    <ion-icon name="add-circle"></ion-icon>
+                </ion-fab-button>
+
+                <!-- <ion-fab-list side="top">
+                    <ion-fab-button (click)='toCreateDependent()'>Dependent</ion-fab-button>
+                    <ion-fab-button (click)='toBookGuestPage()'>Guest</ion-fab-button>
+                </ion-fab-list> -->
+
+                <!-- <ion-fab-list side="start">
+            <ion-fab-button>Vimeo</ion-fab-button>
+          </ion-fab-list> -->
+
+            </ion-fab>
+            <p class="hint" *ngIf='dependents === []'>Your dependents will show here</p>
+            <ion-list lines='full'>
+                <ion-item class="ion-activatable" *ngFor="let dependent of dependents; let i = index" (click)="viewDependent(i)">
+                    <ion-label>Name</ion-label>
+                    {{dependent.fullname}}
+                    <ion-ripple-effect></ion-ripple-effect>
+                </ion-item>
+            </ion-list>
+        </div>
+        <div id="visitors" *ngSwitchCase="'visitors'">
+            <ion-list lines='full'>
+                <ion-list-header>{{role | uppercase}} INFORMATION</ion-list-header>
+                <ion-item>
+                    <ion-label stacked>{{'Estate Name' | translate}}</ion-label>
+                    <ion-input readonly type="text" [value]='profile.estateName | titlecase'></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label stacked>{{'Apartment Number' | translate}}</ion-label>
+                    <ion-input readonly type="text" [value]='profile.estateAptNum | titlecase'></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label stacked>{{'Email' | translate}}</ion-label>
+                    <ion-input readonly type="email" [value]='profile.email'></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label stacked>{{'Address' | translate}}</ion-label>
+                    <ion-input readonly type="text" [value]='address | titlecase'></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>{{'Gender' | translate}}</ion-label>
+                    <ion-input readonly type="text" [value]='profile.gender | titlecase'></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>{{'Marital Status' | translate}}</ion-label>
+                    <ion-input readonly type="text" [value]='profile.maritalStatus | titlecase'></ion-input>
+                </ion-item>
+            </ion-list>
+            <!-- <ion-fab vertical="bottom" horizontal="end" color='secondary'>
+                <ion-fab-button (click)='toBookGuestPage()' color='secondary'>
+                    <ion-icon name="add-circle"></ion-icon>
+                </ion-fab-button>
+
+                <!-- <ion-fab-list side="top">
+                    <ion-fab-button (click)='toCreateDependent()'>Dependent</ion-fab-button>
+                    <ion-fab-button (click)='toBookGuestPage()'>Guest</ion-fab-button>
+                </ion-fab-list> -->
+
+            <!-- <ion-fab-list side="start">
+            <ion-fab-button>Vimeo</ion-fab-button>
+          </ion-fab-list> --
+
+            </ion-fab>
+            <p class="hint" *ngIf='this.visitors === []'>Your visitor activity will show here</p>
+            <ion-list lines='full'>
+                <ion-item *ngFor="let visitor of visitors; let i = index" (click)="viewVisitor(i)">
+                    <ion-label>{{'Name' | translate}}</ion-label>
+                    <ion-input type="text" readonly [value]='visitor.fullname | titlecase'></ion-input>
+                </ion-item>
+            </ion-list> -->
+        </div>
+    </div>
+    <!-- SECURITY DETAILS -->
+    <div id="security" *ngIf='role === "security"'>
+        <ion-list lines='full'>
+            <ion-list-header>{{role | uppercase}} INFORMATION</ion-list-header>
+            <ion-item>
+                <ion-label stacked>{{'Estate Name' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='estateName | titlecase'></ion-input>
+            </ion-item>
+            <!-- <ion-item>
+                <ion-label stacked>{{'Apartment Number' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='profile.estateAptNum | titlecase'></ion-input>
+            </ion-item> -->
+            <ion-item>
+                <ion-label stacked>{{'Email' | translate}}</ion-label>
+                <ion-input readonly type="email" [value]='profile.email'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label stacked>{{'Address' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='address | titlecase'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>{{'Gender' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='profile.gender | titlecase'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>{{'Marital Status' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='profile.maritalStatus | titlecase'></ion-input>
+            </ion-item>
+        </ion-list>
+    </div>
+    <!-- DEPENDENT PROFILE INFORMATION -->
+    <div id="dependent" *ngIf='role === "dependent"'>
+        <ion-list lines='full'>
+            <ion-list-header>{{role | uppercase}} INFORMATION</ion-list-header>
+            <ion-item>
+                <ion-label>{{'Email' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='profile.email'></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>{{'Phone' | translate}}</ion-label>
+                <ion-input readonly type="text" [value]='profile.phone | titlecase'></ion-input>
+            </ion-item>
+        </ion-list>
+        <!-- DEPENDENT'S VISITORS LOG -->
+        <ion-list lines='full' *ngIf='visitors !== "" || visitors !== null'>
+            <ion-list-header>VISITORS LOG</ion-list-header>
+            <ion-item *ngFor='let visitor of visitors; let i = index' (click)='viewVisitor(i)'>
+                <ion-label>{{'Name' | translate}}</ion-label>
+                <ion-input type="text" readonly [value]='visitor.fullname | titlecase'></ion-input>
+            </ion-item>
+        </ion-list>
+    </div>
+    <!-- <div class="user-about-section">
+        <h3 class="details-section-title">{{ 'ABOUT' | translate }}</h3>
+        <p class="user-description">
+            <app-text-shell animation="bouncing" lines="4" [data]="profile.about"></app-text-shell>
+        </p>
+    </div> -->
+    <!-- <div class="user-friends-section">
+        <ion-row class="heading-row">
+            <h3 class="details-section-title">{{ 'FRIENDS' | translate }}</h3>
+            <a class="heading-call-to-action" [routerLink]="['/app/user/friends']">{{ 'SEE_ALL' | translate }}</a>
+        </ion-row>
+        <ion-row class="friends-row">
+            <ion-col class="friend-item" size="2" *ngFor="let friend of profile.friends">
+                <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+                    <app-image-shell class="friend-picture" [src]="friend.image"></app-image-shell>
+                </app-aspect-ratio>
+                <span class="friend-name">
+          <app-text-shell [data]="friend.name"></app-text-shell>
+        </span>
+            </ion-col>
+        </ion-row>
+    </div>
+
+    <div class="user-photos-section">
+        <ion-row class="heading-row">
+            <h3 class="details-section-title">{{ 'PHOTOS' | translate }}</h3>
+            <a class="heading-call-to-action">{{ 'SEE_ALL' | translate }}</a>
+        </ion-row>
+        <ion-row class="pictures-row">
+            <ion-col class="picture-item" size="2" *ngFor="let photo of profile.photos">
+                <app-image-shell [mode]="'cover'" [src]="photo.image" class="user-photo-image">
+                    <app-aspect-ratio [ratio]="{w:1, h:1}">
+                    </app-aspect-ratio>
+                </app-image-shell>
+            </ion-col>
+        </ion-row>
+    </div> -->
+</ion-content>

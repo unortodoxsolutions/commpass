@@ -1,0 +1,69 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <!-- <ion-menu-button></ion-menu-button> -->
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Book Group Guests</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="book-guest-content">
+    <ion-list lines='full'>
+        <ion-item>
+            <ion-label stacked>Name</ion-label>
+            <ion-input type="text" [(ngModel)]='fullname'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Phone Number</ion-label>
+            <ion-input type="tel" [(ngModel)]='phone'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Reason For Visit</ion-label>
+            <ion-input type="text" [(ngModel)]='reason'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Gender</ion-label>
+            <ion-select placeholder="Select One" [(ngModel)]='gender'>
+                <ion-select-option value="f">Female</ion-select-option>
+                <ion-select-option value="m">Male</ion-select-option>
+                <ion-select-option value="other">Other</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <!-- <ion-item>
+            <ion-label stacked>Vehicle Make</ion-label>
+            <ion-input type="text" [(ngModel)]='vehicleMake'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Vehicle Reg Number</ion-label>
+            <ion-input type="text" [(ngModel)]='vehicleRegNum'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Vehicle Color</ion-label>
+            <ion-input type="text" [(ngModel)]='vehicleColor'></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Comments</ion-label>
+            <ion-input type="text" [(ngModel)]='comments'></ion-input>
+        </ion-item> -->
+        <ion-item>
+            <ion-label>Guest Confirmation</ion-label>
+            <ion-toggle [(ngModel)]="isConfirmed"></ion-toggle>
+        </ion-item>
+    </ion-list>
+    <ion-text color='secondary' style="padding: 15px">Guests: {{guests.length}}</ion-text>
+    <br>
+    <ion-list lines='full'>
+        <p style="margin-left: 15px;" *ngFor='let guest of guests; let i = index'>{{i + 1}}. {{guest.fullname}}</p>
+    </ion-list>
+    <ion-button expand='block' fill='solid' (click)='addGuest()' [disabled]='fullname == "" || fullname === undefined'>
+        <ion-spinner *ngIf='addingGuest'></ion-spinner>
+        <ion-text *ngIf='addingGuest'>Adding Guest...</ion-text>
+        <ion-text *ngIf='!addingGuest'>Add Guest</ion-text>
+    </ion-button>
+    <ion-button expand='block' fill='solid' (click)='bookGroupGuests()' *ngIf='guests.length > 1' [disabled]='isLoading || guests.length < 1'>
+        <ion-spinner *ngIf='isLoading'></ion-spinner>
+        <ion-text *ngIf='isLoading'>Booking Guests...</ion-text>
+        <ion-text *ngIf='!isLoading'>Book Guests</ion-text>
+    </ion-button>
+</ion-content>

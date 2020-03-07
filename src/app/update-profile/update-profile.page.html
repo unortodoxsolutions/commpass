@@ -1,0 +1,140 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <!-- <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons> -->
+        <ion-title>
+            Update Profile
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="update-profile-content">
+    <form [formGroup]="updateForm" (ngSubmit)="updateProfile()">
+        <ion-list lines='full'>
+            <!-- FULLNAME  -->
+            <ion-item>
+                <ion-label stacked>Fullname</ion-label>
+                <ion-input type="text" inputmode="text" formControlName='fullname'></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.fullname">
+                    <div class="error-message" *ngIf="updateForm.get('fullname').hasError(validation.type) && (updateForm.get('fullname').dirty || updateForm.get('fullname').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- ESTATE NAME -->
+            <ion-item>
+                <ion-label stacked>Estate Name</ion-label>
+                <ion-input type="text" inputmode="text" formControlName='estateName' readonly></ion-input>
+                <!-- <ion-select placeholder="Select One" formControlName='estateName' readonly>
+                    <ion-select-option *ngFor='let estate of estates' value="{{estate.name}}">{{estate.name}}</ion-select-option>
+                </ion-select> -->
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.estateName">
+                    <div class="error-message" *ngIf="updateForm.get('estateName').hasError(validation.type) && (updateForm.get('estateName').dirty || updateForm.get('estateName').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- APARTMENT NUMBER -->
+            <ion-item *ngIf='role !== "security"'>
+                <ion-label stacked>Estate Apt Number</ion-label>
+                <ion-input type="text" inputmode="text" formControlName='estateAptNum'></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.estateAptNum">
+                    <div class="error-message" *ngIf="updateForm.get('estateAptNum').hasError(validation.type) && (updateForm.get('estateAptNum').dirty || updateForm.get('estateAptNum').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- EMAIL -->
+            <ion-item>
+                <ion-label stacked>Email</ion-label>
+                <ion-input type="email" inputmode="email" formControlName='email'></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.email">
+                    <div class="error-message" *ngIf="updateForm.get('email').hasError(validation.type) && (updateForm.get('email').dirty || updateForm.get('email').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- ADDRESS -->
+            <ion-item>
+                <ion-label stacked>Address</ion-label>
+                <ion-input type="text" inputmode="text" formControlName='address'></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.address">
+                    <div class="error-message" *ngIf="updateForm.get('address').hasError(validation.type) && (updateForm.get('address').dirty || updateForm.get('address').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- GENDER -->
+            <ion-item>
+                <ion-label>Gender</ion-label>
+                <ion-select placeholder="Select One" formControlName='gender'>
+                    <ion-select-option value="f">Female</ion-select-option>
+                    <ion-select-option value="m">Male</ion-select-option>
+                    <ion-select-option value="other">Other</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.gender">
+                    <div class="error-message" *ngIf="updateForm.get('gender').hasError(validation.type) && (updateForm.get('gender').dirty || updateForm.get('gender').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- MARITAL STATUS -->
+            <ion-item>
+                <ion-label>Marital Status</ion-label>
+                <ion-select placeholder="Select One" formControlName='maritalStatus'>
+                    <ion-select-option value="single">Single</ion-select-option>
+                    <ion-select-option value="married">Married</ion-select-option>
+                    <ion-select-option value="divorced">Divorced</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.maritalStatus">
+                    <div class="error-message" *ngIf="updateForm.get('maritalStatus').hasError(validation.type) && (updateForm.get('maritalStatus').dirty || updateForm.get('maritalStatus').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- ABOUT -->
+            <ion-item>
+                <ion-label stacked>About</ion-label>
+                <ion-input type="text" inputmode="text" formControlName='about'></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.about">
+                    <div class="error-message" *ngIf="updateForm.get('about').hasError(validation.type) && (updateForm.get('about').dirty || updateForm.get('about').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </ion-list>
+
+        <ion-button type="submit" expand='block' fill='solid' color='primary' [disabled]='!updateForm.valid || isLoading'>
+            <ion-spinner name="crescent" slot='start' *ngIf='isLoading'></ion-spinner>
+            <ion-text *ngIf='!isLoading'>Update Profile</ion-text>
+        </ion-button>
+    </form>
+</ion-content>

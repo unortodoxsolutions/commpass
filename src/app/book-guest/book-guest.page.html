@@ -1,0 +1,168 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <!-- <ion-menu-button></ion-menu-button> -->
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Book a Guest</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="book-guest-content">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)='bookGroupGuest()'>
+        <ion-fab-button>
+            <ion-icon name="people"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <ion-item>
+
+        <!-- <div class="import__contact"> -->
+        <h3 id="import_contact--text" item-left>Import Contact From Your Device</h3>
+        <ion-button id='import_contact--button' expand='block' fill='solid' (click)='importContact()'>
+            <ion-icon name="person-add"></ion-icon>
+            <!-- Import Contact -->
+        </ion-button>
+        <!-- </div> -->
+    </ion-item>
+    <form [formGroup]="guestForm" (ngSubmit)="bookGuest()">
+        <ion-list lines='full'>
+            <!-- NAME -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Name</ion-label>
+                <ion-input type="text" formControlName="name" inputmode="text"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.name">
+                    <div class="error-message" *ngIf="guestForm.get('name').hasError(validation.type) && (guestForm.get('name').dirty || guestForm.get('name').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- PHONE NUMBER -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Phone Number</ion-label>
+                <ion-input type="text" formControlName="phone"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.phone">
+                    <div class="error-message" *ngIf="guestForm.get('phone').hasError(validation.type) && (guestForm.get('phone').dirty || guestForm.get('phone').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- GENDER -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Gender</ion-label>
+                <ion-select placeholder="Select One" formControlName='gender'>
+                    <ion-select-option value="f">Female</ion-select-option>
+                    <ion-select-option value="m">Male</ion-select-option>
+                    <ion-select-option value="other">Other</ion-select-option>
+                </ion-select>
+                <!-- <ion-input type="text" formControlName="phone"></ion-input> -->
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.gender">
+                    <div class="error-message" *ngIf="guestForm.get('gender').hasError(validation.type) && (guestForm.get('gender').dirty || guestForm.get('gender').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- VEHICLE MAKE -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Vehicle Make</ion-label>
+                <ion-input type="text" formControlName="vehicleMake"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.vehicleMake">
+                    <div class="error-message" *ngIf="guestForm.get('vehicleMake').hasError(validation.type) && (guestForm.get('vehicleMake').dirty || guestForm.get('vehicleMake').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- VEHICLE REG NUMBER -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Vehicle Reg Number</ion-label>
+                <ion-input type="text" formControlName="vehicleRegNum"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.vehicleRegNum">
+                    <div class="error-message" *ngIf="guestForm.get('vehicleRegNum').hasError(validation.type) && (guestForm.get('vehicleRegNum').dirty || guestForm.get('vehicleRegNum').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- VEHICLE COLOR -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Vehicle Color</ion-label>
+                <ion-input type="text" formControlName="vehicleColor"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.vehicleColor">
+                    <div class="error-message" *ngIf="guestForm.get('vehicleColor').hasError(validation.type) && (guestForm.get('vehicleColor').dirty || guestForm.get('vehicleColor').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- COMMENTS -->
+            <ion-item class="input-item">
+                <ion-label position="floating">Comments</ion-label>
+                <ion-input type="text" formControlName="comments"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.comments">
+                    <div class="error-message" *ngIf="guestForm.get('comments').hasError(validation.type) && (guestForm.get('comments').dirty || guestForm.get('comments').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- <ion-item>
+            <ion-label stacked>Name</ion-label>
+            <ion-input type="text" [(ngModel)]='fullname'></ion-input>
+        </ion-item> -->
+            <!-- <ion-item>
+            <ion-label stacked>Phone Number</ion-label>
+            <ion-input type="tel" [(ngModel)]='phone'></ion-input>
+        </ion-item> -->
+            <!-- <ion-item>
+            <ion-label>Gender</ion-label>
+            <ion-select placeholder="Select One" [(ngModel)]='gender'>
+                <ion-select-option value="f">Female</ion-select-option>
+                <ion-select-option value="m">Male</ion-select-option>
+                <ion-select-option value="other">Other</ion-select-option>
+            </ion-select>
+        </ion-item> -->
+            <!-- <ion-item>
+            <ion-label stacked>Vehicle Make</ion-label>
+            <ion-input type="text" [(ngModel)]='vehicleMake'></ion-input>
+        </ion-item> -->
+            <!-- <ion-item>
+            <ion-label stacked>Vehicle Reg Number</ion-label>
+            <ion-input type="text" [(ngModel)]='vehicleRegNum'></ion-input>
+        </ion-item> -->
+            <!-- <ion-item>
+            <ion-label stacked>Vehicle Color</ion-label>
+            <ion-input type="text" [(ngModel)]='vehicleColor'></ion-input>
+        </ion-item> -->
+            <!-- <ion-item>
+            <ion-label stacked>Comments</ion-label>
+            <ion-input type="text" [(ngModel)]='comments'></ion-input>
+        </ion-item> -->
+            <ion-item>
+                <ion-label>Guest Confirmation</ion-label>
+                <ion-toggle formControlName="isConfirmed"></ion-toggle>
+            </ion-item>
+        </ion-list>
+        <ion-button expand='block' fill='solid' (click)='bookGuest()' [disabled]='isLoading || !guestForm.valid'>
+            <ion-spinner name="crescent" slot='start' *ngIf='isLoading'></ion-spinner>
+            <ion-text *ngIf='isLoading' style='margin-left: 30px !important'>Booking Guest...</ion-text>
+            <ion-text *ngIf='!isLoading'>Book Guest</ion-text>
+        </ion-button>
+    </form>
+</ion-content>

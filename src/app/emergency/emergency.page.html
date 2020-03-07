@@ -1,0 +1,31 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot='start'>
+            <ion-back-button></ion-back-button>
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Emergency</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="call"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button class='lg' (click)='callEstateAuth()'>
+                <ion-icon name="warning" slot='start'></ion-icon>
+                Contact estate authorities
+            </ion-fab-button>
+            <ion-fab-button class='lg' (click)='callAuth()'>
+                <ion-icon name="warning" slot='start'></ion-icon>
+                Contact authorities
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+
+    <p class="hint">
+        In case of emergency, use the floating action button below to call the authorities
+    </p>
+</ion-content>

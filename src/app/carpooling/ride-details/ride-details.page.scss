@@ -1,0 +1,50 @@
+ion-grid {
+    display: flex;
+    width: 100vw;
+    .dataRow {
+        width: 100vw !important;
+        display: flex;
+        flex-direction: column;
+        .fromRow,
+        .intRow {
+            height: 20px !important
+        }
+        .toRow {}
+    }
+}
+
+ion-list-header {
+    background: var(--ion-color-primary);
+    color: #fff;
+}
+
+.rideDate {
+    text-align: center;
+    font-size: 24px;
+    color: var(--ion-color-secondary);
+}
+
+.carOwnerItem {
+    background-color: var(--app-background-shade) !important;
+    padding: 0px 0px 0px 0px;
+    ion-avatar {
+        height: 70px !important;
+        width: 70px !important
+    }
+    ion-col[size='7'] {
+        padding: 0px 0px 0px 5px;
+        .carOwnerName {
+            margin: 0px 0px 5px 0px;
+        }
+        .carOwnerAbout {
+            margin: 0;
+        }
+    }
+    ion-col[size='3'] {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        font-size: 24px;
+        color: var(--ion-color-primary) !important
+    }
+}

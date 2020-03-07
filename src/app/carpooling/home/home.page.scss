@@ -1,0 +1,52 @@
+ion-input,
+input {
+    text-align: end !important;
+    border: 0 !important;
+    width: 75vw !important
+}
+
+ion-button {
+    ion-spinner {
+        margin-right: 20px !important;
+    }
+}
+
+.error-container {
+    color: var(--ion-color-danger) !important;
+    margin: 0px 0px 0px 10px;
+}
+
+.findRideResultList,
+.rideHistoryList {
+    ion-list-header {
+        background: var(--ion-color-primary);
+        color: #fff;
+    }
+    .findRideResultItem,
+    .rideHistoryItem {
+        background-color: var(--app-background-shade) !important;
+        padding: 0px 0px 0px 0px;
+        ion-avatar {
+            height: 70px !important;
+            width: 70px !important
+        }
+        ion-col[size='7'] {
+            padding: 0px 0px 0px 5px;
+            .rideResidentName {
+                margin: 0px 0px 5px 0px;
+            }
+            .rideFromTo {
+                margin: 0;
+            }
+        }
+        ion-col[size='3'] {
+            padding: 0;
+            .rideTime {
+                margin: 0px 0px 5px 0px;
+            }
+            .rideSeats {
+                margin: 0;
+            }
+        }
+    }
+}

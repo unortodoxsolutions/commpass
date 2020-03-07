@@ -1,0 +1,108 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Ride Details
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ride-history-content">
+    <ion-list lines='full'>
+        <p class="rideDate">{{ride.date | date:'short'}}</p>
+        <ion-list-header>Route</ion-list-header>
+        <!-- ROUTE -->
+        <ion-item>
+            <ion-grid>
+                <ion-row class='dataRow'>
+                    <ion-row class='fromRow'>
+                        <ion-col size='1'>
+                            <ion-icon name="pin" color='seceondary'></ion-icon>
+                        </ion-col>
+                        <ion-col size='11'>
+                            <ion-text>{{ ride.from }}</ion-text>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class='intRow'>
+                        <ion-col size='1'>
+                            <ion-icon name="more" color='dark'></ion-icon>
+                        </ion-col>
+                        <ion-col size='11'>
+                            <!-- <ion-icon name="pin" color='danger'></ion-icon> -->
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class='toRow'>
+                        <ion-col size='1'>
+                            <ion-icon name="pin" color='danger'></ion-icon>
+                        </ion-col>
+                        <ion-col size='11'>
+                            <ion-text>{{ ride.to }}</ion-text>
+                            <!-- <ion-icon name="pin" color='danger'></ion-icon> -->
+                        </ion-col>
+                    </ion-row>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+
+        <!-- PRICE/SEATS -->
+        <!-- <ion-item class="itemPriceSeats">
+            <ion-text item-right>{{ ride.seats }} Seats</ion-text>
+        </ion-item> -->
+
+        <!-- RIDE DETAILS -->
+        <ion-list-header>Ride Details</ion-list-header>
+        <ion-item>
+            <ion-label position='stacked'>
+                From
+            </ion-label>
+            <ion-text>{{ ride.from }}</ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label position='stacked'>
+                To
+            </ion-label>
+            <ion-text>{{ ride.to }}</ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label position='stacked'>
+                Date
+            </ion-label>
+            <ion-text>{{ ride.date | date:'shortDate' }}</ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label position='stacked'>
+                Time
+            </ion-label>
+            <ion-text>{{ ride.time | date:'shortTime' }}</ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label position='stacked'>
+                Available Seats
+            </ion-label>
+            <ion-text>{{ ride.seats }}</ion-text>
+        </ion-item>
+
+        <!-- CAR OWNER -->
+        <ion-list-header *ngIf='uid === ride.offeredBy.uid'>Car Owner</ion-list-header>
+        <ion-item *ngIf='uid === ride.offeredBy.uid' class='carOwnerItem ion-activatable'>
+            <ion-avatar item-left>
+                <img src="https://picsum.photos/100" *ngIf='ride.offeredBy.profilePic === undefined'>
+                <img [src]='ride.offeredBy.profilePic' *ngIf='ride.offeredBy.profilePic !== undefined'>
+            </ion-avatar>
+            <ion-col size='7'>
+                <h6 class="carOwnerName"> {{ ride.offeredBy.fullname | titlecase }}</h6>
+                <p class="carOwnerAbout">{{ ride.offeredBy.about }}</p>
+            </ion-col>
+            <ion-col size='3' (click)='requestRide()'>
+                <ion-button shape='round' [disabled]='loading'>
+                    <ion-spinner *ngIf='loading'></ion-spinner>
+                    Request
+                </ion-button>
+            </ion-col>
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-item>
+    </ion-list>
+</ion-content>

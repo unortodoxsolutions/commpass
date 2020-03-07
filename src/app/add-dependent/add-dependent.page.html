@@ -1,0 +1,84 @@
+<ion-header no-border>
+    <ion-toolbar color='primary'>
+        <ion-buttons slot="start">
+            <!-- <ion-menu-button></ion-menu-button> -->
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Add a Dependent</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="book-guest-content" *ngIf='role === "resident"'>
+    <form [formGroup]="dependentForm" (ngSubmit)="createDependentAccount()">
+        <ion-list class="inputs-list" lines="full">
+            <!-- ACCOUNT NAME-->
+            <ion-item class="input-item">
+                <ion-input type="text" placeholder='Account Name' formControlName='accountName'></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.accountName">
+                    <div class="error-message" *ngIf="dependentForm.get('accountName').hasError(validation.type) && (dependentForm.get('accountName').dirty || dependentForm.get('accountName').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- EMAIL -->
+            <ion-item class="input-item">
+                <ion-input type="email" placeholder="Email" formControlName="email" clearInput autocapitalize="off" inputmode="email"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.email">
+                    <div class="error-message" *ngIf="dependentForm.get('email').hasError(validation.type) && (dependentForm.get('email').dirty || dependentForm.get('email').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- PHONE -->
+            <ion-item class="input-item">
+                <ion-input type="tel" placeholder="Phone" formControlName="phone" clearInput autocapitalize="off" inputmode="tel"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.phone">
+                    <div class="error-message" *ngIf="dependentForm.get('phone').hasError(validation.type) && (dependentForm.get('phone').dirty || dependentForm.get('phone').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- RELATIONSHIP -->
+            <ion-item class="input-item">
+                <ion-input type="text" placeholder="Relationship" formControlName="relationship" clearInput autocapitalize="off" inputmode="text"></ion-input>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.relationship">
+                    <div class="error-message" *ngIf="dependentForm.get('relationship').hasError(validation.type) && (dependentForm.get('relationship').dirty || dependentForm.get('relationship').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- PASSWORD -->
+            <ion-item class="input-item">
+                <app-show-hide-password>
+                    <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+                </app-show-hide-password>
+            </ion-item>
+            <div class="error-container">
+                <ng-container *ngFor="let validation of validation_messages.password">
+                    <div class="error-message" *ngIf="dependentForm.get('password').hasError(validation.type) && (dependentForm.get('password').dirty || dependentForm.get('password').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span>{{ validation.message }}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </ion-list>
+
+        <ion-button class="login-btn" type="submit" expand="block" [disabled]="!dependentForm.valid || isLoading">
+            <ion-spinner name="crescent" slot='start' *ngIf='isLoading'></ion-spinner>
+            <ion-text *ngIf='isLoading' style='margin-left: 30px !important'>Adding Dependent...</ion-text>
+            <ion-text *ngIf='!isLoading'>Add Dependent</ion-text>
+        </ion-button>
+    </form>
+</ion-content>
